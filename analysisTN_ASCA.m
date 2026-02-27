@@ -1,5 +1,5 @@
-%% Leading example of ANOVA Simultaneous Component Analysis. A
-% Tutorial Review. Submitted to Journal of Chemometrics. 2025. 
+%% Leading example. "From design of experiments to analysis of variance of multivariate data: a tutorial review on ANOVA simultaneous component analysis" 
+% Submitted to Journal of Chemometrics. 2026. 
 %
 % Please, reference the following paper if using this data:
 %
@@ -11,12 +11,12 @@
 %
 % Dependencies: 
 %
-%   - MEDA Toolbox v1.10 at https://github.com/codaslab/MEDA-Toolbox    
+%   - MEDA Toolbox v1.11 at https://github.com/codaslab/MEDA-Toolbox    
 %
 % coded by: Jose Camacho Paez (josecamacho@ugr.es)
-% last modification: 10/Nov/2025
+% last modification: 27/Feb/2026
 %
-% Copyright (C) 2025  University of Granada, Granada
+% Copyright (C) 2026  University of Granada, Granada
 % 
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -63,16 +63,21 @@ pvalue = 0.05
 
 %% Check outliers with PCA
 
-[Dst,Qst] = mspcPca(preprocess2D(X,'Preprocess',1),'Preprocessing',2,'PCs',1:2,'ObsClass',class,'ObsLabel',pac_l);
+scoresPca(X,'PCs',1:2,'Preprocessing',2,'ObsClass',class,'ObsLabel',pac_l);
+saveas(gcf,'./Figures/pca12')
+saveas(gcf,'./Figures/pca12.eps','epsc')
+
+[Dst,Qst] = mspcPca(X,'Preprocessing',2,'PCs',1:2,'ObsClass',class,'ObsLabel',pac_l);
+ylabel('Q-statistic');xlabel('D-statistic')
 saveas(gcf,'./Figures/pca-mspc')
 saveas(gcf,'./Figures/pca-mspc.eps','epsc')
 
 
 %% Check outliers with ASCA
  
-[table, struct] = parglm(preprocess2D(X,'Preprocess',1), F,'Preprocessing',2,'Model', [1 2], 'Fmtc', 0, 'Nested', [1 3], ...
-    'Random', [0 0 1], 'Stable', true);
-table.Source(2:4)={"Responder","Time","Patient"}
+[table, struct] = parglm(X, F,'Preprocessing',2,'Model', [1 2], 'Fmtc', 0, 'Nested', [1 3], ...
+    'Random', [0 0 1]);
+table.Source(1:3)={"Responder","Time","Patient"}
 
 table2latex(table, 'ASCA.tex', '%.2f');
 
@@ -122,9 +127,9 @@ saveas(gcf,sprintf('./Figures/Res%db.eps',f),'epsc')
 
 %% Try with the rank transform
  
-[table, struct] = parglm(preprocess2D(rankTransform(X),'Preprocess',1), F,'Preprocessing',2,'Model', [1 2], 'Fmtc', 0, 'Nested', [1 3], ...
-    'Random', [0 0 1], 'Stable', true);
-table.Source(2:4)={"Responder","Time","Patient"}
+[table, struct] = parglm(rankTransform(X), F,'Preprocessing',2,'Model', [1 2], 'Fmtc', 0, 'Nested', [1 3], ...
+    'Random', [0 0 1]);
+table.Source(1:3)={"Responder","Time","Patient"}
 
 table2latex(table, 'ASCA2.tex', '%.2f');
 
@@ -193,9 +198,9 @@ time(indO) = [];
 timel(indO) = [];
 pac_l(indO) = [];
 
-[table, struct] = parglm(preprocess2D(X,'Preprocess',1), F,'Preprocessing',2,'Model', [1 2], 'Fmtc', 0, 'Nested', [1 3], ...
-    'Random', [0 0 1], 'Stable', true)
-table.Source(2:4)={"Responder","Time","Patient"}
+[table, struct] = parglm(X, F,'Preprocessing',2,'Model', [1 2], 'Fmtc', 0, 'Nested', [1 3], ...
+    'Random', [0 0 1])
+table.Source(1:3)={"Responder","Time","Patient"}
 
 table2latex(table, 'ASCA3.tex', '%.2f');
 
@@ -262,6 +267,7 @@ saveas(gcf,'./Figures/loadingsPCA3.eps','epsc')
 % Visualize the MSPC
 varPca(model.factors{3}.matrix,'PCs',1:20,'Preprocessing',0); % Either 1 or 4 PCs
 mspcPca(model.factors{3}.matrix,'Preprocessing',0, 'PCs',1:4,'PlotCal',false,'ObsTest',model.factors{3}.matrix+model.residuals, 'ObsLabel',pac_l,'ObsClass',class,'PValueD',0.001,'PValueQ',0.000001);
+ylabel('Q-statistic');xlabel('D-statistic')
 saveas(gcf,'./Figures/residualsPCA3')
 saveas(gcf,'./Figures/residualsPCA3.eps','epsc')
 
@@ -279,7 +285,6 @@ saveas(gcf,'./Figures/loadingsRes.eps','epsc')
 % Visualize the MSPC
 varPca(model.residuals,'PCs',1:20,'Preprocessing',0);  % 1 PC
 mspcPca(model.residuals,'Preprocessing',0, 'PCs',1:1, 'ObsLabel',pac_l,'ObsClass',class);
+ylabel('Q-statistic');xlabel('D-statistic')
 saveas(gcf,'./Figures/residualsRes')
 saveas(gcf,'./Figures/residualsRes.eps','epsc')
-
-%%

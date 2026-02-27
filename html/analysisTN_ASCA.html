@@ -6,10 +6,10 @@
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
       -->
-<title>Leading example of ANOVA Simultaneous Component Analysis. A</title>
+<title>Leading example. "From design of experiments to analysis of variance of multivariate data: a tutorial review on ANOVA simultaneous component analysis"</title>
 <meta name="generator" content="MATLAB 24.2">
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
-<meta name="DC.date" content="2025-11-10">
+<meta name="DC.date" content="2026-02-27">
 <meta name="DC.source" content="analysisTN_ASCA.m">
 <style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
@@ -76,16 +76,16 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 </head>
 <body>
 <div class="content">
-<h1>Leading example of ANOVA Simultaneous Component Analysis. A</h1>
+<h1>Leading example. "From design of experiments to analysis of variance of multivariate data: a tutorial review on ANOVA simultaneous component analysis"</h1>
 <!--introduction-->
-<p>Tutorial Review. Submitted to Journal of Chemometrics. 2025.</p>
+<p>Submitted to Journal of Chemometrics. 2026.</p>
 <p>Please, reference the following paper if using this data:</p>
 <p>C. Diaz, C. Gonz&aacute;lez-Olmedo, L. D&iacute;az-Beltr&aacute;n, J. Camacho, P. Mena Garc&iacute;a, A. Mart&iacute;n-Bl&aacute;zquez, M. Fern&aacute;ndez-Navarro, A. L. Ortega-Granados, F. G&aacute;lvez-Montosa, J. A. Marchal, et al., &ldquo;Predicting dynamic response to neoadjuvant chemotherapy in breast cancer: a novel metabolomics approach,&rdquo; Molecular Oncology, vol. 16, no. 14, pp. 2658&ndash;2671, 2022.</p>
 <p>Dependencies:</p>
-<pre class="language-matlab">- MEDA Toolbox <span class="string">v1.10</span> <span class="string">at</span> <span class="string">https://github.com/codaslab/MEDA-Toolbox</span>
+<pre class="language-matlab">- MEDA Toolbox <span class="string">v1.11</span> <span class="string">at</span> <span class="string">https://github.com/codaslab/MEDA-Toolbox</span>
 </pre>
-<p>coded by: Jose Camacho Paez (<a href="mailto:josecamacho@ugr.es">josecamacho@ugr.es</a>) last modification: 10/Nov/2025</p>
-<p>Copyright (C) 2025 University of Granada, Granada</p>
+<p>coded by: Jose Camacho Paez (<a href="mailto:josecamacho@ugr.es">josecamacho@ugr.es</a>) last modification: 27/Feb/2026</p>
+<p>Copyright (C) 2026 University of Granada, Granada</p>
 <p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
 <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
 <p>You should have received a copy of the GNU General Public License along with this program. If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</p>
@@ -147,14 +147,19 @@ pvalue =
 
 </pre>
 <h2 id="2">Check outliers with PCA</h2>
-<pre class="codeinput">[Dst,Qst] = mspcPca(preprocess2D(X,<span class="string">'Preprocess'</span>,1),<span class="string">'Preprocessing'</span>,2,<span class="string">'PCs'</span>,1:2,<span class="string">'ObsClass'</span>,class,<span class="string">'ObsLabel'</span>,pac_l);
+<pre class="codeinput">scoresPca(X,<span class="string">'PCs'</span>,1:2,<span class="string">'Preprocessing'</span>,2,<span class="string">'ObsClass'</span>,class,<span class="string">'ObsLabel'</span>,pac_l);
+saveas(gcf,<span class="string">'./Figures/pca12'</span>)
+saveas(gcf,<span class="string">'./Figures/pca12.eps'</span>,<span class="string">'epsc'</span>)
+
+[Dst,Qst] = mspcPca(X,<span class="string">'Preprocessing'</span>,2,<span class="string">'PCs'</span>,1:2,<span class="string">'ObsClass'</span>,class,<span class="string">'ObsLabel'</span>,pac_l);
+ylabel(<span class="string">'Q-statistic'</span>);xlabel(<span class="string">'D-statistic'</span>)
 saveas(gcf,<span class="string">'./Figures/pca-mspc'</span>)
 saveas(gcf,<span class="string">'./Figures/pca-mspc.eps'</span>,<span class="string">'epsc'</span>)
 </pre>
-<img vspace="5" hspace="5" src="analysisTN_ASCA_01.png" alt=""> <h2 id="3">Check outliers with ASCA</h2>
-<pre class="codeinput">[table, struct] = parglm(preprocess2D(X,<span class="string">'Preprocess'</span>,1), F,<span class="string">'Preprocessing'</span>,2,<span class="string">'Model'</span>, [1 2], <span class="string">'Fmtc'</span>, 0, <span class="string">'Nested'</span>, [1 3], <span class="keyword">...</span>
-    <span class="string">'Random'</span>, [0 0 1], <span class="string">'Stable'</span>, true);
-table.Source(2:4)={<span class="string">"Responder"</span>,<span class="string">"Time"</span>,<span class="string">"Patient"</span>}
+<img vspace="5" hspace="5" src="analysisTN_ASCA_01.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_02.png" alt=""> <h2 id="3">Check outliers with ASCA</h2>
+<pre class="codeinput">[table, struct] = parglm(X, F,<span class="string">'Preprocessing'</span>,2,<span class="string">'Model'</span>, [1 2], <span class="string">'Fmtc'</span>, 0, <span class="string">'Nested'</span>, [1 3], <span class="keyword">...</span>
+    <span class="string">'Random'</span>, [0 0 1]);
+table.Source(1:3)={<span class="string">"Responder"</span>,<span class="string">"Time"</span>,<span class="string">"Patient"</span>}
 
 table2latex(table, <span class="string">'ASCA.tex'</span>, <span class="string">'%.2f'</span>);
 
@@ -205,24 +210,23 @@ saveas(gcf,sprintf(<span class="string">'./Figures/Res%db.eps'</span>,f),<span c
 <pre class="codeoutput">
 table =
 
-  7&times;7 table
+  6&times;7 table
 
           Source           SumSq     PercSumSq    df    MeanSq       F        Pvalue 
     ___________________    ______    _________    __    ______    _______    ________
 
-    {'Mean'           }    18.418     0.26523      1    18.418        NaN         NaN
-    {["Responder"    ]}    324.89      4.6787      1    324.89     2.3224     0.04995
-    {["Time"         ]}    184.87      2.6622      2    92.433    0.98395     0.47752
-    {["Patient"      ]}      2658      38.278     19     139.9     1.4892    0.011988
-    {'Interaction 1-2'}    257.26      3.7048      2    128.63     1.3693      0.2008
-    {'Residuals'      }    3569.7      51.407     38     93.94        NaN         NaN
-    {'Total'          }      6944         100     63    110.22        NaN         NaN
+    {["Responder"    ]}    324.89     4.6664       1    324.89     2.3224    0.052947
+    {["Time"         ]}    184.87     2.6552       2    92.433    0.98395     0.49151
+    {["Patient"      ]}      2658     38.177      19     139.9     1.4892    0.006993
+    {'Interaction 1-2'}    257.26      3.695       2    128.63     1.3693     0.18881
+    {'Residuals'      }    3569.7     51.271      38     93.94        NaN         NaN
+    {'Total'          }    6962.4     100.46      62     112.3        NaN         NaN
 
 </pre>
-<img vspace="5" hspace="5" src="analysisTN_ASCA_02.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_03.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_04.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_05.png" alt=""> <h2 id="4">Try with the rank transform</h2>
-<pre class="codeinput">[table, struct] = parglm(preprocess2D(rankTransform(X),<span class="string">'Preprocess'</span>,1), F,<span class="string">'Preprocessing'</span>,2,<span class="string">'Model'</span>, [1 2], <span class="string">'Fmtc'</span>, 0, <span class="string">'Nested'</span>, [1 3], <span class="keyword">...</span>
-    <span class="string">'Random'</span>, [0 0 1], <span class="string">'Stable'</span>, true);
-table.Source(2:4)={<span class="string">"Responder"</span>,<span class="string">"Time"</span>,<span class="string">"Patient"</span>}
+<img vspace="5" hspace="5" src="analysisTN_ASCA_03.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_04.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_05.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_06.png" alt=""> <h2 id="4">Try with the rank transform</h2>
+<pre class="codeinput">[table, struct] = parglm(rankTransform(X), F,<span class="string">'Preprocessing'</span>,2,<span class="string">'Model'</span>, [1 2], <span class="string">'Fmtc'</span>, 0, <span class="string">'Nested'</span>, [1 3], <span class="keyword">...</span>
+    <span class="string">'Random'</span>, [0 0 1]);
+table.Source(1:3)={<span class="string">"Responder"</span>,<span class="string">"Time"</span>,<span class="string">"Patient"</span>}
 
 table2latex(table, <span class="string">'ASCA2.tex'</span>, <span class="string">'%.2f'</span>);
 
@@ -264,21 +268,20 @@ saveas(gcf,sprintf(<span class="string">'./Figures/Res2%d.eps'</span>,f),<span c
 <pre class="codeoutput">
 table =
 
-  7&times;7 table
+  6&times;7 table
 
           Source           SumSq     PercSumSq    df    MeanSq      F        Pvalue 
     ___________________    ______    _________    __    ______    ______    ________
 
-    {'Mean'           }    21.354     0.30752      1    21.354       NaN         NaN
-    {["Responder"    ]}    376.68      5.4246      1    376.68    2.5982    0.035964
-    {["Time"         ]}    194.35      2.7987      2    97.173     1.078     0.39261
-    {["Patient"      ]}    2754.5      39.668     19    144.98    1.6083    0.002997
-    {'Interaction 1-2'}    244.62      3.5227      2    122.31    1.3568      0.2018
-    {'Residuals'      }    3425.5       49.33     38    90.144       NaN         NaN
-    {'Total'          }      6944         100     63    110.22       NaN         NaN
+    {["Responder"    ]}    376.68     5.4079       1    376.68    2.5982    0.030969
+    {["Time"         ]}    194.35     2.7902       2    97.173     1.078     0.39161
+    {["Patient"      ]}    2754.5     39.546      19    144.98    1.6083    0.001998
+    {'Interaction 1-2'}    244.62     3.5119       2    122.31    1.3568     0.18482
+    {'Residuals'      }    3425.5     49.179      38    90.144       NaN         NaN
+    {'Total'          }    6965.4     100.43      62    112.34       NaN         NaN
 
 </pre>
-<img vspace="5" hspace="5" src="analysisTN_ASCA_06.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_07.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_08.png" alt=""> <h2 id="5">Delete outliers and Check again</h2>
+<img vspace="5" hspace="5" src="analysisTN_ASCA_07.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_08.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_09.png" alt=""> <h2 id="5">Delete outliers and Check again</h2>
 <pre class="codeinput">indO = find(ismember(F(:,3),<span class="string">'M0357'</span>)); <span class="comment">% Outlier</span>
 X(indO,:) = [];
 F(indO,:) = [];
@@ -306,9 +309,9 @@ time(indO) = [];
 timel(indO) = [];
 pac_l(indO) = [];
 
-[table, struct] = parglm(preprocess2D(X,<span class="string">'Preprocess'</span>,1), F,<span class="string">'Preprocessing'</span>,2,<span class="string">'Model'</span>, [1 2], <span class="string">'Fmtc'</span>, 0, <span class="string">'Nested'</span>, [1 3], <span class="keyword">...</span>
-    <span class="string">'Random'</span>, [0 0 1], <span class="string">'Stable'</span>, true)
-table.Source(2:4)={<span class="string">"Responder"</span>,<span class="string">"Time"</span>,<span class="string">"Patient"</span>}
+[table, struct] = parglm(X, F,<span class="string">'Preprocessing'</span>,2,<span class="string">'Model'</span>, [1 2], <span class="string">'Fmtc'</span>, 0, <span class="string">'Nested'</span>, [1 3], <span class="keyword">...</span>
+    <span class="string">'Random'</span>, [0 0 1])
+table.Source(1:3)={<span class="string">"Responder"</span>,<span class="string">"Time"</span>,<span class="string">"Patient"</span>}
 
 table2latex(table, <span class="string">'ASCA3.tex'</span>, <span class="string">'%.2f'</span>);
 
@@ -350,18 +353,17 @@ saveas(gcf,sprintf(<span class="string">'./Figures/Res3%d.eps'</span>,f),<span c
 <pre class="codeoutput">
 table =
 
-  7&times;7 table
+  6&times;7 table
 
           Source           SumSq     PercSumSq    df    MeanSq      F        Pvalue 
     ___________________    ______    _________    __    ______    ______    ________
 
-    {'Mean'           }    22.277     0.37528      1    22.277       NaN         NaN
-    {'Factor 1'       }     451.1      7.5995      1     451.1    2.7985    0.013986
-    {'Factor 2'       }    150.01      2.5272      2    75.006      0.92     0.56144
-    {'Factor 3'       }    2579.1      43.448     16    161.19    1.9772    0.000999
-    {'Interaction 1-2'}    204.65      3.4477      2    102.33    1.2551     0.26374
-    {'Residuals'      }    2608.9      43.951     32    81.528       NaN         NaN
-    {'Total'          }      5936         100     54    109.93       NaN         NaN
+    {'Factor 1'       }     451.1      7.571       1     451.1    2.7985    0.014985
+    {'Factor 2'       }    150.01     2.5177       2    75.006      0.92     0.61239
+    {'Factor 3'       }    2579.1     43.286      16    161.19    1.9772    0.000999
+    {'Interaction 1-2'}    204.65     3.4348       2    102.33    1.2551     0.24875
+    {'Residuals'      }    2608.9     43.786      32    81.528       NaN         NaN
+    {'Total'          }    5958.3      100.6      53    112.42       NaN         NaN
 
 
 struct = 
@@ -383,34 +385,37 @@ struct =
              fmtc: 0
            coding: [0 0 0]
            nested: [1 3]
-           stable: 1
+             type: 'Simultaneous'
           nLevels: [2 3 18]
              Xnan: [54&times;112 double]
+               df: [1 2 16]
+            dfint: 2
+              Tdf: 54
+              Rdf: 32
                 D: [54&times;22 double]
                 B: [22&times;112 double]
             inter: [54&times;112 double]
-          effects: [0.3753 7.5995 2.5272 43.4485 3.4477 43.9505]
+          effects: [7.5710 2.5177 43.2860 3.4348 43.7862]
         residuals: [54&times;112 double]
-                p: [0.0140 0.5614 9.9900e-04 0.2637]
+                p: [0.0150 0.6124 9.9900e-04 0.2488]
 
 
 table =
 
-  7&times;7 table
+  6&times;7 table
 
           Source           SumSq     PercSumSq    df    MeanSq      F        Pvalue 
     ___________________    ______    _________    __    ______    ______    ________
 
-    {'Mean'           }    22.277     0.37528      1    22.277       NaN         NaN
-    {["Responder"    ]}     451.1      7.5995      1     451.1    2.7985    0.013986
-    {["Time"         ]}    150.01      2.5272      2    75.006      0.92     0.56144
-    {["Patient"      ]}    2579.1      43.448     16    161.19    1.9772    0.000999
-    {'Interaction 1-2'}    204.65      3.4477      2    102.33    1.2551     0.26374
-    {'Residuals'      }    2608.9      43.951     32    81.528       NaN         NaN
-    {'Total'          }      5936         100     54    109.93       NaN         NaN
+    {["Responder"    ]}     451.1      7.571       1     451.1    2.7985    0.014985
+    {["Time"         ]}    150.01     2.5177       2    75.006      0.92     0.61239
+    {["Patient"      ]}    2579.1     43.286      16    161.19    1.9772    0.000999
+    {'Interaction 1-2'}    204.65     3.4348       2    102.33    1.2551     0.24875
+    {'Residuals'      }    2608.9     43.786      32    81.528       NaN         NaN
+    {'Total'          }    5958.3      100.6      53    112.42       NaN         NaN
 
 </pre>
-<img vspace="5" hspace="5" src="analysisTN_ASCA_09.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_10.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_11.png" alt=""> <h2 id="6">Model visualization: only significant terms</h2>
+<img vspace="5" hspace="5" src="analysisTN_ASCA_10.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_11.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_12.png" alt=""> <h2 id="6">Model visualization: only significant terms</h2>
 <pre class="codeinput">
 <span class="comment">% Factor 1</span>
 
@@ -437,6 +442,7 @@ saveas(gcf,<span class="string">'./Figures/loadingsPCA3.eps'</span>,<span class=
 <span class="comment">% Visualize the MSPC</span>
 varPca(model.factors{3}.matrix,<span class="string">'PCs'</span>,1:20,<span class="string">'Preprocessing'</span>,0); <span class="comment">% Either 1 or 4 PCs</span>
 mspcPca(model.factors{3}.matrix,<span class="string">'Preprocessing'</span>,0, <span class="string">'PCs'</span>,1:4,<span class="string">'PlotCal'</span>,false,<span class="string">'ObsTest'</span>,model.factors{3}.matrix+model.residuals, <span class="string">'ObsLabel'</span>,pac_l,<span class="string">'ObsClass'</span>,class,<span class="string">'PValueD'</span>,0.001,<span class="string">'PValueQ'</span>,0.000001);
+ylabel(<span class="string">'Q-statistic'</span>);xlabel(<span class="string">'D-statistic'</span>)
 saveas(gcf,<span class="string">'./Figures/residualsPCA3'</span>)
 saveas(gcf,<span class="string">'./Figures/residualsPCA3.eps'</span>,<span class="string">'epsc'</span>)
 
@@ -454,10 +460,11 @@ saveas(gcf,<span class="string">'./Figures/loadingsRes.eps'</span>,<span class="
 <span class="comment">% Visualize the MSPC</span>
 varPca(model.residuals,<span class="string">'PCs'</span>,1:20,<span class="string">'Preprocessing'</span>,0);  <span class="comment">% 1 PC</span>
 mspcPca(model.residuals,<span class="string">'Preprocessing'</span>,0, <span class="string">'PCs'</span>,1:1, <span class="string">'ObsLabel'</span>,pac_l,<span class="string">'ObsClass'</span>,class);
+ylabel(<span class="string">'Q-statistic'</span>);xlabel(<span class="string">'D-statistic'</span>)
 saveas(gcf,<span class="string">'./Figures/residualsRes'</span>)
 saveas(gcf,<span class="string">'./Figures/residualsRes.eps'</span>,<span class="string">'epsc'</span>)
 </pre>
-<img vspace="5" hspace="5" src="analysisTN_ASCA_12.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_13.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_14.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_15.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_16.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_17.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_18.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_19.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_20.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_21.png" alt=""> <p class="footer">
+<img vspace="5" hspace="5" src="analysisTN_ASCA_13.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_14.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_15.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_16.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_17.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_18.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_19.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_20.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_21.png" alt=""> <img vspace="5" hspace="5" src="analysisTN_ASCA_22.png" alt=""> <p class="footer">
 <br>
 <a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2024b</a>
 <br>
@@ -465,8 +472,8 @@ saveas(gcf,<span class="string">'./Figures/residualsRes.eps'</span>,<span class=
 </div>
 <!--
 ##### SOURCE BEGIN #####
-%% Leading example of ANOVA Simultaneous Component Analysis. A
-% Tutorial Review. Submitted to Journal of Chemometrics. 2025. 
+%% Leading example. "From design of experiments to analysis of variance of multivariate data: a tutorial review on ANOVA simultaneous component analysis" 
+% Submitted to Journal of Chemometrics. 2026. 
 %
 % Please, reference the following paper if using this data:
 %
@@ -478,12 +485,12 @@ saveas(gcf,<span class="string">'./Figures/residualsRes.eps'</span>,<span class=
 %
 % Dependencies: 
 %
-%   - MEDA Toolbox v1.10 at https://github.com/codaslab/MEDA-Toolbox    
+%   - MEDA Toolbox v1.11 at https://github.com/codaslab/MEDA-Toolbox    
 %
 % coded by: Jose Camacho Paez (josecamacho@ugr.es)
-% last modification: 10/Nov/2025
+% last modification: 27/Feb/2026
 %
-% Copyright (C) 2025  University of Granada, Granada
+% Copyright (C) 2026  University of Granada, Granada
 % 
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -530,16 +537,21 @@ pvalue = 0.05
 
 %% Check outliers with PCA
 
-[Dst,Qst] = mspcPca(preprocess2D(X,'Preprocess',1),'Preprocessing',2,'PCs',1:2,'ObsClass',class,'ObsLabel',pac_l);
+scoresPca(X,'PCs',1:2,'Preprocessing',2,'ObsClass',class,'ObsLabel',pac_l);
+saveas(gcf,'./Figures/pca12')
+saveas(gcf,'./Figures/pca12.eps','epsc')
+
+[Dst,Qst] = mspcPca(X,'Preprocessing',2,'PCs',1:2,'ObsClass',class,'ObsLabel',pac_l);
+ylabel('Q-statistic');xlabel('D-statistic')
 saveas(gcf,'./Figures/pca-mspc')
 saveas(gcf,'./Figures/pca-mspc.eps','epsc')
 
 
 %% Check outliers with ASCA
  
-[table, struct] = parglm(preprocess2D(X,'Preprocess',1), F,'Preprocessing',2,'Model', [1 2], 'Fmtc', 0, 'Nested', [1 3], ...
-    'Random', [0 0 1], 'Stable', true);
-table.Source(2:4)={"Responder","Time","Patient"}
+[table, struct] = parglm(X, F,'Preprocessing',2,'Model', [1 2], 'Fmtc', 0, 'Nested', [1 3], ...
+    'Random', [0 0 1]);
+table.Source(1:3)={"Responder","Time","Patient"}
 
 table2latex(table, 'ASCA.tex', '%.2f');
 
@@ -589,9 +601,9 @@ saveas(gcf,sprintf('./Figures/Res%db.eps',f),'epsc')
 
 %% Try with the rank transform
  
-[table, struct] = parglm(preprocess2D(rankTransform(X),'Preprocess',1), F,'Preprocessing',2,'Model', [1 2], 'Fmtc', 0, 'Nested', [1 3], ...
-    'Random', [0 0 1], 'Stable', true);
-table.Source(2:4)={"Responder","Time","Patient"}
+[table, struct] = parglm(rankTransform(X), F,'Preprocessing',2,'Model', [1 2], 'Fmtc', 0, 'Nested', [1 3], ...
+    'Random', [0 0 1]);
+table.Source(1:3)={"Responder","Time","Patient"}
 
 table2latex(table, 'ASCA2.tex', '%.2f');
 
@@ -660,9 +672,9 @@ time(indO) = [];
 timel(indO) = [];
 pac_l(indO) = [];
 
-[table, struct] = parglm(preprocess2D(X,'Preprocess',1), F,'Preprocessing',2,'Model', [1 2], 'Fmtc', 0, 'Nested', [1 3], ...
-    'Random', [0 0 1], 'Stable', true)
-table.Source(2:4)={"Responder","Time","Patient"}
+[table, struct] = parglm(X, F,'Preprocessing',2,'Model', [1 2], 'Fmtc', 0, 'Nested', [1 3], ...
+    'Random', [0 0 1])
+table.Source(1:3)={"Responder","Time","Patient"}
 
 table2latex(table, 'ASCA3.tex', '%.2f');
 
@@ -729,6 +741,7 @@ saveas(gcf,'./Figures/loadingsPCA3.eps','epsc')
 % Visualize the MSPC
 varPca(model.factors{3}.matrix,'PCs',1:20,'Preprocessing',0); % Either 1 or 4 PCs
 mspcPca(model.factors{3}.matrix,'Preprocessing',0, 'PCs',1:4,'PlotCal',false,'ObsTest',model.factors{3}.matrix+model.residuals, 'ObsLabel',pac_l,'ObsClass',class,'PValueD',0.001,'PValueQ',0.000001);
+ylabel('Q-statistic');xlabel('D-statistic')
 saveas(gcf,'./Figures/residualsPCA3')
 saveas(gcf,'./Figures/residualsPCA3.eps','epsc')
 
@@ -746,10 +759,10 @@ saveas(gcf,'./Figures/loadingsRes.eps','epsc')
 % Visualize the MSPC
 varPca(model.residuals,'PCs',1:20,'Preprocessing',0);  % 1 PC
 mspcPca(model.residuals,'Preprocessing',0, 'PCs',1:1, 'ObsLabel',pac_l,'ObsClass',class);
+ylabel('Q-statistic');xlabel('D-statistic')
 saveas(gcf,'./Figures/residualsRes')
 saveas(gcf,'./Figures/residualsRes.eps','epsc')
 
-%%
 ##### SOURCE END #####
 -->
 </body>
