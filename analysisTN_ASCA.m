@@ -11,7 +11,7 @@
 %
 % Dependencies: 
 %
-%   - MEDA Toolbox v1.11 at https://github.com/codaslab/MEDA-Toolbox    
+%   - MEDA Toolbox v1.12 at https://github.com/codaslab/MEDA-Toolbox    
 %
 % coded by: Jose Camacho Paez (josecamacho@ugr.es)
 % last modification: 27/Feb/2026
@@ -67,7 +67,7 @@ scoresPca(X,'PCs',1:2,'Preprocessing',2,'ObsClass',class,'ObsLabel',pac_l);
 saveas(gcf,'./Figures/pca12')
 saveas(gcf,'./Figures/pca12.eps','epsc')
 
-[Dst,Qst] = mspcPca(X,'Preprocessing',2,'PCs',1:2,'ObsClass',class,'ObsLabel',pac_l);
+[Dst,Qst] = mspcPca(X,'Preprocessing',2,'PCs',1:2,'ObsClass',class,'ObsLabel',pac_l,'BlurIndex',0.5);
 ylabel('Q-statistic');xlabel('D-statistic')
 saveas(gcf,'./Figures/pca-mspc')
 saveas(gcf,'./Figures/pca-mspc.eps','epsc')
@@ -108,7 +108,7 @@ for l=1:length(uf)
 end
 
 [~, ind ] = sort(time);
-plotScatter([g(ind),q(ind)],'ObsClass',timel(ind),'EleLabel',pac_l(ind));
+plotScatter([g(ind),q(ind)],'ObsClass',timel(ind),'EleLabel',pac_l(ind),'BlurIndex',0.5);
 set(gca,'XTick',1:length(uf),'XTickLabel',uf,'XTickLabelRotation',45,'FontSize',14)
 axis([0 length(uf)+1,0,400])
 legend('Basal','Presurgery','Postsurgery','Location','northwest')
@@ -116,7 +116,7 @@ ylabel('Q-statistic of Residuals','FontSize',18)
 saveas(gcf,sprintf('./Figures/Res%d',f))
 saveas(gcf,sprintf('./Figures/Res%d.eps',f),'epsc')
 
-plotScatter([g(ind),q(ind)],'ObsClass',F(ind,1),'EleLabel',pac_l(ind));
+plotScatter([g(ind),q(ind)],'ObsClass',F(ind,1),'EleLabel',pac_l(ind),'BlurIndex',0.5);
 set(gca,'XTick',1:length(uf),'XTickLabel',uf,'XTickLabelRotation',45,'FontSize',14)
 axis([0 length(uf)+1,0,400])
 uf = unique(F(:,1));
@@ -199,7 +199,7 @@ timel(indO) = [];
 pac_l(indO) = [];
 
 [table, struct] = parglm(X, F,'Preprocessing',2,'Model', [1 2], 'Fmtc', 0, 'Nested', [1 3], ...
-    'Random', [0 0 1])
+    'Random', [0 0 1]);
 table.Source(1:3)={"Responder","Time","Patient"}
 
 table2latex(table, 'ASCA3.tex', '%.2f');
@@ -244,7 +244,7 @@ saveas(gcf,sprintf('./Figures/Res3%d.eps',f),'epsc')
 
 % Factor 1
 
-scores(model.factors{1},'ObsLabel',string(pac_l(1:3:end)),'ObsClass',string(class(1:3:end)),'BlurIndex',1);
+scores(model.factors{1},'ObsLabel',string(pac_l),'ObsClass',string(class),'BlurIndex',1);
 xlabel('Patients')
 saveas(gcf,'./Figures/scoresPCA1')
 saveas(gcf,'./Figures/scoresPCA1.eps','epsc')
